@@ -22,19 +22,15 @@ export default function Task(props) {
 
   const deleteTask = () => {
     const index = props.myTasks.indexOf(props.me);
-    console.log("me:  ", props.me);
-    console.log("at > ", index, " there is : ", props.myTasks[index]);
-    // const updatedTasks = props.myTasks.toSpliced(index, 1);
-    const updatedTasks = props.myTasks.filter((item)=>item!==props.myTasks[index])
-    // updatedTasks.splice(index, 1);
+    const updatedTasks = props.myTasks.filter(
+      (item) => item !== props.myTasks[index]
+    );
 
-    console.log("after deletion: \n", updatedTasks);
     props.setMyTasks(updatedTasks);
   };
 
   return (
     <View style={taskStyles.container}>
-      
       <TouchableOpacity onPress={markAsDone}>
         <Text
           style={{
@@ -42,6 +38,7 @@ export default function Task(props) {
               props.status === "Done" && props.filter !== "Done"
                 ? "line-through"
                 : "none",
+            fontSize: 17,
           }}
         >
           {props.title}
@@ -49,13 +46,15 @@ export default function Task(props) {
       </TouchableOpacity>
       <View style={taskStyles.container}>
         <TouchableOpacity onPress={deleteTask}>
-          <Text>
-            <AntDesign name="delete" size={24} color="black" />
+          <Text style={{ marginHorizontal: 10 }}>
+            <AntDesign name="delete" size={20} color="black" />
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Details")}>
-          <Text>
-            <MaterialIcons name="double-arrow" size={24} color="black" />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Details", { task: props.me })}
+        >
+          <Text style={{ marginHorizontal: 10 }}>
+            <MaterialIcons name="double-arrow" size={20} color="black" />
           </Text>
         </TouchableOpacity>
       </View>
