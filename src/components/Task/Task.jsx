@@ -4,28 +4,25 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { taskStyles } from "./TaskStyle";
 import { useNavigation } from "@react-navigation/native";
-
+import { useSelector, useDispatch } from "react-redux";
+import { filters } from "../../Shared/types";
+import {
+  getFilter,
+  filterApplied,
+  taskStatusUpdated,
+  taskRemoved,
+} from "../../Redux/slices/taskSlice";
 export default function Task(props) {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
   const markAsDone = () => {
-    const updatedTasks = props.myTasks.map((task) => {
-      if (task.id === props.me.id) {
-        return { ...task, status: "Done" };
-      } else {
-        return task;
-      }
-    });
-    props.setMyTasks(updatedTasks);
+    dispatch(taskStatusUpdated({ task: props.me, newStatus: filters.DONE }));
+    dispatch(filterApplied(filter));
   };
 
   const deleteTask = () => {
-    const index = props.myTasks.indexOf(props.me);
-    const updatedTasks = props.myTasks.filter(
-      (item) => item !== props.myTasks[index]
-    );
-
-    props.setMyTasks(updatedTasks);
+    dispatch(taskRemoved(props.me));
   };
 
   return (
@@ -34,10 +31,10 @@ export default function Task(props) {
         <Text
           style={{
             textDecorationLine:
-              props.status === "Done" && props.filter !== "Done"
+              props.status === filters.DONE && filter !== filters.DONE
                 ? "line-through"
                 : "none",
-            fontSize: 17,
+            fontSize: 15,
           }}
         >
           {props.title}

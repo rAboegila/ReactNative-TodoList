@@ -1,10 +1,18 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./InputStyle";
-export default function Inputs(props) {
+import { filters } from "../../Shared/types";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  filterApplied,
+  taskAdded,
+  getFilter,
+} from "../../Redux/slices/taskSlice";
+export default function Inputs() {
+  const dispatch = useDispatch();
   const [titleInput, setTitleInput] = useState("");
   const [descInput, setDescInput] = useState("");
-
+  const filter = useSelector(getFilter);
   function generateTaskId() {
     const randomHex = () => Math.floor(Math.random() * 16).toString(16);
     const uuid = "task" + Array.from({ length: 32 }, randomHex).join("");
@@ -12,8 +20,9 @@ export default function Inputs(props) {
   }
   const addTask = (title, description) => {
     const id = generateTaskId();
-    const newTask = { id, title, description, status: "Active" };
-    props.setMyTasks((curr) => [newTask, ...curr]);
+    const newTask = { id, title, description, status: filters.ACTIVE };
+    dispatch(taskAdded(newTask));
+    dispatch(filterApplied(filter));
     setTitleInput("");
     setDescInput("");
   };

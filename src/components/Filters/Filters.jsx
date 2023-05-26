@@ -1,17 +1,30 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
+
+import { filters } from "../../Shared/types";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  getFilter,
+  getNumFilteredTasks,
+  filterApplied,
+} from "../../Redux/slices/taskSlice";
+
 import { styles } from "./FilterStyle";
-export default function Filters({ filter, setFilter }) {
+
+export default function Filters() {
+  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
   return (
     <View style={styles.filters}>
       <Pressable
         onPress={() => {
-          setFilter("All");
+          dispatch(filterApplied(filters.ALL));
         }}
         style={({ pressed }) => [
           {
             backgroundColor:
-              filter === "All" ? "red" : pressed ? "#022b9e" : "#0233ba",
+              filter === filters.ALL ? "red" : pressed ? "#022b9e" : "#0233ba",
           },
           styles.filter,
         ]}
@@ -20,12 +33,12 @@ export default function Filters({ filter, setFilter }) {
       </Pressable>
       <Pressable
         onPress={() => {
-          setFilter("Active");
+          dispatch(filterApplied(filters.ACTIVE));
         }}
         style={({ pressed }) => [
           {
             backgroundColor:
-              filter === "Active"
+              filter === filters.ACTIVE
                 ? "red"
                 : pressed
                 ? "rgb(217, 149, 2)"
@@ -38,12 +51,16 @@ export default function Filters({ filter, setFilter }) {
       </Pressable>
       <Pressable
         onPress={() => {
-          setFilter("Done");
+          dispatch(filterApplied(filters.DONE));
         }}
         style={({ pressed }) => [
           {
             backgroundColor:
-              filter === "Done" ? "red" : pressed ? "rgb(4, 107, 4)" : "green",
+              filter === filters.DONE
+                ? "red"
+                : pressed
+                ? "rgb(4, 107, 4)"
+                : "green",
           },
           styles.filter,
         ]}
