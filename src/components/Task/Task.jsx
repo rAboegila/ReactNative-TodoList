@@ -1,12 +1,11 @@
 import { Pressable, TouchableOpacity, Text, View } from "react-native";
 import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { taskStyles } from "./ComponentStyle";
+import { taskStyles } from "./TaskStyle";
 import { useNavigation } from "@react-navigation/native";
+
 export default function Task(props) {
-  // console.log(props.navigation);
   const navigation = useNavigation();
 
   const markAsDone = () => {
